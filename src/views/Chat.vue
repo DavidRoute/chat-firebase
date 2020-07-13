@@ -24,7 +24,8 @@
             <div
               v-for="user in users"
               :key="user.id"
-              class="chat_list active_chat"
+              class="chat_list"
+              :class="[user == currentPeerUser ? 'active_chat' : '']"
             >
               <div class="chat_people" style="cursor: pointer;">
                 <a @click="selectUser(user)">
@@ -76,13 +77,13 @@ export default {
     return {
       authUser: {},
       users: [],
-      currentPeerUser: null,
+      currentPeerUser: null
     };
   },
 
   beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      firebase.auth().onAuthStateChanged((user) => {
+    next(vm => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
           console.log(user);
           next();
@@ -108,10 +109,10 @@ export default {
       let result = await db.collection("users").get();
 
       if (result.docs.length > 0) {
-        this.users = result.docs.map((doc) => doc.data());
+        this.users = result.docs.map(doc => doc.data());
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
