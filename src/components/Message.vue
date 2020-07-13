@@ -47,7 +47,7 @@ import moment from "moment";
 
 export default {
   props: {
-    currentPeerUser: Object,
+    currentPeerUser: Object
   },
 
   data() {
@@ -55,7 +55,7 @@ export default {
       authUser: {},
       message: null,
       messages: [],
-      groupChatId: null,
+      groupChatId: null
     };
   },
 
@@ -68,7 +68,7 @@ export default {
   watch: {
     currentPeerUser() {
       this.fetchMessages();
-    },
+    }
   },
 
   methods: {
@@ -79,15 +79,21 @@ export default {
     },
 
     fetchMessages() {
-      this.groupChatId = `${this.authUser.uid}-${this.currentPeerUser.id}`;
-      console.log(this.groupChatId);
+      if (
+        this.hashString(this.authUser.uid) <=
+        this.hashString(this.currentPeerUser.id)
+      ) {
+        this.groupChatId = `${this.authUser.uid}-${this.currentPeerUser.id}`;
+      } else {
+        this.groupChatId = `${this.currentPeerUser.id}-${this.authUser.uid}`;
+      }
 
       db.collection("chat")
         .doc(this.groupChatId)
         .collection(this.groupChatId)
-        .onSnapshot((querySnapshot) => {
+        .onSnapshot(querySnapshot => {
           let allMessages = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             allMessages.push(doc.data());
           });
 
@@ -112,7 +118,7 @@ export default {
         idFrom: this.authUser.uid,
         idTo: this.currentPeerUser.id,
         timestamp: timestamp,
-        message: this.message.trim(),
+        message: this.message.trim()
       };
 
       db.collection("chat")
@@ -126,6 +132,15 @@ export default {
 
       this.message = null;
     },
-  },
+
+    hashString(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash += Math.pow(str.charCodeAt(i) * 31, str.length - i);
+        hash = hash & hash; // Convert to 32bit integer
+      }
+      return hash;
+    }
+  }
 };
 </script>
