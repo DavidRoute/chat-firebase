@@ -91,13 +91,8 @@ export default {
       db.collection("chat")
         .doc(this.groupChatId)
         .collection(this.groupChatId)
-        .onSnapshot(querySnapshot => {
-          let allMessages = [];
-          querySnapshot.forEach(doc => {
-            allMessages.push(doc.data());
-          });
-
-          this.messages = allMessages;
+        .onSnapshot(snapshot => {
+          this.messages = snapshot.docs.map(doc => doc.data());
 
           setTimeout(() => {
             this.scrollToBottom();
