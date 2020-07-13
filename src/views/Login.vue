@@ -8,6 +8,7 @@
 
 <script>
 import firebase from "firebase";
+import { db } from "@/config/Firebase";
 
 export default {
   methods: {
@@ -17,20 +18,34 @@ export default {
       firebase
         .auth()
         .signInWithPopup(provider)
-        .then((result) => {
-          console.log(result);
-          //   var token = result.credential.accessToken;
-          //   var user = result.user;
+        .then(async (result) => {
+          let user = result.user;
+
+          if (user) {
+            const result = await db
+              .collection("users")
+              .where("id", "==", user.uid)
+              .get();
+
+            if (result.docs.length === 0) {
+              // Set new data since this is a new user
+              db.collection("users")
+                .doc(user.uid)
+                .set({
+                  id: user.uid,
+                  nickname: user.displayName,
+                  avatar: user.photoURL,
+                })
+                .then(() => {
+                  localStorage.setItem("authUserId", user.uid);
+                });
+            }
+          }
 
           this.$router.push("/chat");
         })
         .catch(function(error) {
           console.log(error);
-
-          //   var errorCode = error.code;
-          //   var errorMessage = error.message;
-          //   var email = error.email;
-          //   var credential = error.credential;
         });
     },
   },

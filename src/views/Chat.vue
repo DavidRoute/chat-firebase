@@ -19,167 +19,40 @@
               </div>
             </div>
           </div>
+
           <div class="inbox_chat">
-            <div class="chat_list active_chat">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img">
-                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                </div>
-                <div class="chat_ib">
-                  <h5>
-                    Sunil Rajput
-                    <span class="chat_date">Dec 25</span>
-                  </h5>
-                  <p>
-                    Test, which is a new approach to have all solutions
-                    astrology under one roof.
-                  </p>
-                </div>
+            <div
+              v-for="user in users"
+              :key="user.id"
+              class="chat_list active_chat"
+            >
+              <div class="chat_people" style="cursor: pointer;">
+                <a @click="selectUser(user)">
+                  <div class="chat_img">
+                    <img :src="user.avatar" alt="sunil" />
+                  </div>
+                  <div class="chat_ib">
+                    <h5>
+                      {{ user.nickname }}
+                      <span class="chat_date">Dec 25</span>
+                    </h5>
+                    <p>
+                      Test, which is a new approach to have all solutions
+                      astrology under one roof.
+                    </p>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="mesgs">
-          <div class="msg_history" ref="msgBox">
-            <div v-for="message in messages" :key="message.createdAt">
-              <div v-if="authUser.uid != message.author.id" class="incoming_msg">
-                <div class="incoming_msg_img">
-                  <img :src="message.author.avatar" alt="sunil" />
-                </div>
-                <div class="received_msg">
-                  <div class="received_withd_msg">
-                    <p>{{ message.message }}</p>
-                    <span class="time_date">11:01 AM | June 9</span>
-                  </div>
-                </div>
-              </div>
+        <div v-if="currentPeerUser">
+          <Message :currentPeerUser="currentPeerUser" />
+        </div>
 
-              <div v-else class="outgoing_msg">
-                <div class="sent_msg">
-                  <p>{{ message.message }}</p>
-                  <span class="time_date">11:01 AM | June 9</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="type_msg">
-            <div class="input_msg_write">
-              <input
-                @keyup.enter="saveMessage"
-                v-model="message"
-                type="text"
-                class="write_msg"
-                placeholder="Type a message"
-              />
-              <button class="msg_send_btn" type="button">
-                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
+        <div v-else class="mesgs">
+          <h1>Welcome Chat</h1>
         </div>
       </div>
 
@@ -193,19 +66,23 @@
 
 <script>
 import firebase from "firebase";
+import { db } from "@/config/Firebase.js";
+import Message from "@/components/Message.vue";
 
 export default {
+  components: { Message },
+
   data() {
     return {
-      message: null,
-      messages: [],
-      authUser: {}
+      authUser: {},
+      users: [],
+      currentPeerUser: null,
     };
   },
 
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      firebase.auth().onAuthStateChanged(user => {
+    next((vm) => {
+      firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           console.log(user);
           next();
@@ -217,61 +94,28 @@ export default {
   },
 
   created() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.authUser = user;
-    });
+    this.authUser = firebase.auth().currentUser;
 
-    this.fetchMessages();
+    this.fetchUsers();
   },
 
   methods: {
-    scrollToBottom() {
-      let box = document.querySelector(".msg_history");
-
-      box.scrollTop = box.scrollHeight;
+    selectUser(user) {
+      this.currentPeerUser = user;
     },
 
-    fetchMessages() {
-      window.db
-        .collection("chat")
-        .orderBy("createdAt")
-        .onSnapshot(querySnapshot => {
-          let allMessages = [];
-          querySnapshot.forEach(doc => {
-            allMessages.push(doc.data());
-          });
+    async fetchUsers() {
+      let result = await db.collection("users").get();
 
-          this.messages = allMessages;
-
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 100);
-        });
+      if (result.docs.length > 0) {
+        this.users = result.docs.map((doc) => doc.data());
+      }
     },
-
-    saveMessage() {
-      window.db
-        .collection("chat")
-        .add({
-          author: {
-            id: this.authUser.uid,
-            name: this.authUser.displayName,
-            avatar: this.authUser.photoURL
-          },
-          message: this.message,
-          createdAt: new Date()
-        })
-        .then(() => {
-          this.scrollToBottom();
-        });
-
-      this.message = null;
-    }
-  }
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .container {
   max-width: 1170px;
   margin: auto;
